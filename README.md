@@ -26,16 +26,19 @@ The repository only stores HTML pages and these pages are stored as distinct fil
 3. Parallelization 
 4. Proxy Support
 5. Distributed Crawling
-6. depth rule
-7. ui 
+6. Depth rule
+7. UI 
 8. Binary data support
 
 ### Built With
 To understand the project, please refer Akka, Jsoup, cli & Tikka frameworks.
 
 ## Getting Started
+
 CrawlManager is the main class.
-JobManager helps creates Akka actor system & delegates respective messages to different actors.
+
+
+JobManager helps creating Akka actor system & delegates respective messages to different actors.
 
 #### Lists of actors:
 - DownloaderActor 
@@ -46,7 +49,7 @@ JobManager helps creates Akka actor system & delegates respective messages to di
 - URLExtractorActor
 - URLFilterActor
 
-### Prerequisites
+### Prerequisites:
 
 Maven 3.3.0+
 
@@ -125,12 +128,32 @@ java CrawlManager -domains list.txt -filters filterset.txt -conf jobParameters.c
  
 * [Maven](https://maven.apache.org/) - Dependency Management 
 
+#### Dependencies:
+| Artifact  | Version |
+| ------------- | ------------- |
+|org.apache.httpcomponents.httpcore|4.4.10|
+|org.apache.httpcomponents.httpclient|4.5.6|
+|org.slf4j.slf4j-log4j12|1.7.25</version> 
+|org.slf4j.slf4j-api|1.7.25|
+|commons-io.commons-io|2.6|
+|org.apache.tika.tika-parsers|1.18|
+|org.apache.tika.tika-core|1.18|
+|org.jsoup.jsoup|1.11.3|
+|com.typesafe.akka.akka-actor_2.12|2.5.14|
+|mysql.mysql-connector-java|5.1.46|
+|org.apache.lucene.lucene-core|2.3.0| 
+|commons-cli.commons-cli|1.4|
+
 ## Contributing
 
- 
 ## Versioning
 
 ## Furture Plan
+
+1. Cleanup & document code
+2. PLan for distributed options other than Akka
+3. Junit
+4. All above features
  
 ## Authors
 
