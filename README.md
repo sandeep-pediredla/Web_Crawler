@@ -5,9 +5,46 @@ It moreover stores all the outside and inside links to the site. The crawler wil
 in time, which is how it moves from one site to the next. By this prepare the crawler captures and lists each site that has 
 joins to at slightest one other site.
 
-## Getting Started
+## Architecture
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project.
+![alt text](/docs/img/high_level_overview.JPG "High Level Overview")
+
+## Flow
+
+![alt text](/docs/img/flow.JPG "Data Flow")
+
+## Overview
+
+A Web crawler starts with a list of URLs to visit, called the domain list. As the crawler visits these URLs, it saves the html page to storage repository & it also identifies all the hyperlinks in the page and adds them to the list of URLs to visit, called the child url crawl list. It then indexes the download document which makes search easy. URLs from the child url crawl list are recursively visited according to a set of policies.
+
+The repository only stores HTML pages and these pages are stored as distinct files. A repository is similar to any other system that stores data, like a modern day database. 
+
+## Features
+
+1. Priority of jobs
+2. Stop / resume crawl
+3. Parallelization 
+4. Proxy Support
+5. Distributed Crawling
+6. depth rule
+7. ui 
+8. Binary data support
+
+### Built With
+To understand the project, please refer Akka, Jsoup, cli & Tikka frameworks.
+
+## Getting Started
+CrawlManager is the main class.
+JobManager helps creates Akka actor system & delegates respective messages to different actors.
+
+#### Lists of actors:
+- DownloaderActor 
+- ParserActor
+- DocumentIndexActor
+- JobActor
+- SaveDocumentActor
+- URLExtractorActor
+- URLFilterActor
 
 ### Prerequisites
 
@@ -17,10 +54,10 @@ Java 8+
 
 Mysql
 
-## Installing
+## Building the project
  
  ```shell
-Mvn clean install
+mvn clean install
 ```
 ## Configuration
 | Configuration Name  | Details | Datatype |
@@ -54,6 +91,12 @@ Mvn clean install
 ## Deployment
 ### Database
 Creation of job details and links tables are one time task as show below:
+ ```mysql
+
+create database crawler_db;
+
+use crawler_db;
+
 CREATE TABLE job_details 
   ( 
      id           INTEGER PRIMARY KEY auto_increment, 
@@ -62,10 +105,18 @@ CREATE TABLE job_details
      job_name     VARCHAR(255), 
      job_status   VARCHAR(255), 
      url          VARCHAR(255), 
-     parent_id    INTEGER, 
-     PRIMARY KEY ( id ) 
-  ); 
- 
+     parent_id    INTEGER
+  );
+  
+CREATE TABLE `url_links` (
+  `id` int(11) NOT NULL,
+  `link` varchar(200) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+```
+
 ## Usage
 ```
 java CrawlManager -domains list.txt -filters filterset.txt -conf jobParameters.config -job jobName
@@ -79,6 +130,7 @@ java CrawlManager -domains list.txt -filters filterset.txt -conf jobParameters.c
  
 ## Versioning
 
+## Furture Plan
  
 ## Authors
 
