@@ -17,6 +17,7 @@ import static com.wipro.digital.assignment.web.crawler.common.Constants.USER;
 import java.io.File;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -27,6 +28,8 @@ import com.wipro.digital.assignment.web.crawler.bean.JobInformation;
 import com.wipro.digital.assignment.web.crawler.conf.Configuration;
 import com.wipro.digital.assignment.web.crawler.jdbc.JobStore;
 import com.wipro.digital.assignment.web.crawler.utils.PropertiesUtils;
+
+import akka.util.Timeout;
 
 public class CrawlManager {
 
@@ -54,7 +57,6 @@ public class CrawlManager {
 		final String jobName = cmd.getOptionValue(JOB_NAME);
 		final Properties properties = PropertiesUtils.loadPropertiesFile(propertiesPath);
 		final Configuration conf = Configuration.getInstance(properties);
-
 		startCrawJob(domainSet, filterSet, jobName, properties, conf);
 	}
 
@@ -64,13 +66,15 @@ public class CrawlManager {
 		logger.debug("Starting crawl job {} & user {}", jobName, properties.getProperty(USER));
 		final JobInformation jobDetails = JobStore.createOrRestartJob(jobName, properties.getProperty(USER));
 		createORDeleteJobDirs(jobName, conf);
-		crawlData(domainSet, filterSet, jobDetails);
+		crawlData(domainSet, filterSet, jobDetails, conf);
 	}
 
 	private static void crawlData(final Set<String> domainSet, final Set<String> filterSet,
-			final JobInformation jobDetails) {
-		final JobManager jobManager = new JobManager(filterSet, jobDetails);
-		jobManager.crawlPages(domainSet);
+			final JobInformation jobInfo, final Configuration conf) {
+
+		final Timeout timeout = new Timeout(conf.getSocketTimeout(), TimeUnit.SECONDS);
+		final JobManager jobManager = new JobManager(filterSet, timeout);
+		jobManager.crawlPages(domainSet, jobInfo);
 	}
 
 	private static void createORDeleteJobDirs(final String jobName, final Configuration conf) {

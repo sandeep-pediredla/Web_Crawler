@@ -1,12 +1,6 @@
 
 package com.wipro.digital.assignment.web.crawler.jdbc;
 
-import static com.wipro.digital.assignment.web.crawler.common.Constants.H2_DB_NAME;
-import static com.wipro.digital.assignment.web.crawler.common.Constants.H2_DRIVER;
-import static com.wipro.digital.assignment.web.crawler.common.Constants.PASSWORD;
-import static com.wipro.digital.assignment.web.crawler.common.Constants.USERNAME;
-
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,15 +14,13 @@ import org.slf4j.LoggerFactory;
 import com.wipro.digital.assignment.web.crawler.bean.JobInformation;
 import com.wipro.digital.assignment.web.crawler.common.CrawlerStatus;
 import com.wipro.digital.assignment.web.crawler.conf.Configuration;
+import com.wipro.digital.assignment.web.crawler.exception.ConfigurationException;
 import com.wipro.digital.assignment.web.crawler.exception.CrawlerException;
 
 public class JobStore {
 
 	/** logger */
 	private static final Logger logger = LoggerFactory.getLogger(JobStore.class);
-
-	/** The jdbc Url. */
-	private static String jdbcURl;
 
 	/** The Constant selectTableSQL. */
 	private static final String JOB_DETAILS_QUERY = "SELECT * from Job_Details where JOB_NAME = '";
@@ -49,23 +41,25 @@ public class JobStore {
 
 		if (connection == null) {
 
-			final String dbLocation = Configuration.getInstance().getDbLocation();
-			final File dbFolderPath = new File(dbLocation);
+			final String jdbcURl = Configuration.getInstance().getJdbcUrl();
+			final String driver = Configuration.getInstance().getJdbcDriver();
+			final String user = Configuration.getInstance().getJdbcUser();
+			final String password = Configuration.getInstance().getJdbcPassword();
 
-			if (!dbFolderPath.exists()) {
-				dbFolderPath.mkdirs();
-			}
-
-			jdbcURl = "jdbc:h2:" + dbFolderPath.getAbsolutePath() + File.separator + H2_DB_NAME;
 			try {
-				Class.forName(H2_DRIVER);
-				connection = DriverManager.getConnection(jdbcURl, USERNAME, PASSWORD);
+				Class.forName(driver);
+				connection = DriverManager.getConnection(jdbcURl, user, password);
 				logger.debug("Connection created succesfully");
 			} catch (final Exception e) {
 				logger.error("exception occured while connecting to database", e);
+				throw new ConfigurationException(e);
 			}
 		}
 		return connection;
+	}
+
+	public static void updateJobInfo(JobInformation jobInformation) {
+
 	}
 
 	/**
@@ -139,9 +133,6 @@ public class JobStore {
 			if (preparedStatement != null) {
 				preparedStatement.close();
 			}
-			if (dbConnection != null) {
-				dbConnection.close();
-			}
 		}
 	}
 
@@ -162,7 +153,7 @@ public class JobStore {
 			dbConnection = getConnection();
 			statement = dbConnection.createStatement();
 
-			System.out.println(JOB_DETAILS_QUERY);
+			System.out.println(JOB_DETAILS_QUERY + jobName + "' order by ID desc LIMIT 1");
 
 			// execute select SQL stetement
 			final ResultSet rs = statement.executeQuery(JOB_DETAILS_QUERY + jobName + "' order by ID desc LIMIT 1");
@@ -182,10 +173,6 @@ public class JobStore {
 
 			if (statement != null) {
 				statement.close();
-			}
-
-			if (dbConnection != null) {
-				dbConnection.close();
 			}
 
 		}

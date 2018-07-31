@@ -17,19 +17,7 @@ public class Constants {
 
 	/** The crawlers manager. */
 	public static final String CRAWLERS_MANAGER = "CrawlersManager";
-
-	/** The username. */
-	// JDBC related
-	public static final String USERNAME = "";
-
-	/** The password. */
-	public static final String PASSWORD = "";
-
-	/** The h2 driver. */
-	public static final String H2_DRIVER = "org.h2.Driver";
-
-	/** The h2 db name. */
-	public static final String H2_DB_NAME = "h2_driver";
+ 
 
 	/** The user. */
 	public static final String USER = "user";

@@ -18,8 +18,15 @@ public class Configuration {
 	/** The configuration. */
 	private volatile static Configuration configuration;
 
-	/** The db location. */
-	private String dbLocation = System.getProperty("java.io.tmpdir") + "LocalMockDatabase";;
+	private Properties properties;
+
+	/** jdbcUrl. */
+	private String jdbcUrl;
+	private String jdbcDriver;
+	private String jdbcUser;
+	private String jdbcPassword;
+
+	private String indexDirectory;
 
 	/**
 	 * The folder which will be used by crawler for storing the intermediate
@@ -32,9 +39,6 @@ public class Configuration {
 	 * stopped/crashed crawl. However, it makes crawling slightly slower
 	 */
 	private boolean resumableCrawling = false;
-
-	/** The lock timeout for the underlying sleepycat DB, in milliseconds. */
-	private long dbLockTimeout = 500;
 
 	/**
 	 * Maximum depth of crawling For unlimited depth this parameter should be
@@ -55,10 +59,11 @@ public class Configuration {
 	private String userAgentString = "sandeep-crawler";
 
 	/**
-	 * request delay in milliseconds (delay between sending two requests to the
-	 * same host).
+	 * politeness delay in milliseconds (delay between sending two requests to
+	 * the same host). a politeness policy that states how to avoid overloading
+	 * Web sites.
 	 */
-	private int requestDelay = 200;
+	private int politenessDelay = 200;
 
 	/** Should we also crawl https pages?. */
 	private boolean includeHttpsPages = true;
@@ -152,7 +157,7 @@ public class Configuration {
 			synchronized (Configuration.class) {
 				if (configuration == null) {
 					configuration = new Configuration();
-
+					configuration.setProperties(props);
 					try {
 						setConfigurationValues(props);
 					} catch (final Exception e) {
@@ -229,8 +234,8 @@ public class Configuration {
 		if (tmpStorageFolder == null) {
 			throw new Exception("Crawl storage folder is not set in the CrawlConfig.");
 		}
-		if (requestDelay < 0) {
-			throw new Exception("Invalid value for request delay: " + requestDelay);
+		if (politenessDelay < 0) {
+			throw new Exception("Invalid value for request delay: " + politenessDelay);
 		}
 		if (maxDepthOfCrawling < -1) {
 			throw new Exception(
@@ -279,28 +284,6 @@ public class Configuration {
 	 */
 	public void setResumableCrawling(final boolean resumableCrawling) {
 		this.resumableCrawling = resumableCrawling;
-	}
-
-	/**
-	 * Set the lock timeout for the underlying sleepycat DB, in milliseconds.
-	 * Default is 500.
-	 *
-	 * @param dbLockTimeout
-	 *            the new db lock timeout
-	 * @see com.sleepycat.je.EnvironmentConfig#setLockTimeout(long,
-	 *      java.util.concurrent.TimeUnit)
-	 */
-	public void setDbLockTimeout(final long dbLockTimeout) {
-		this.dbLockTimeout = dbLockTimeout;
-	}
-
-	/**
-	 * Gets the db lock timeout.
-	 *
-	 * @return the db lock timeout
-	 */
-	public long getDbLockTimeout() {
-		return this.dbLockTimeout;
 	}
 
 	/**
@@ -369,7 +352,7 @@ public class Configuration {
 	 * @return the request delay
 	 */
 	public int getrequestDelay() {
-		return requestDelay;
+		return politenessDelay;
 	}
 
 	/**
@@ -380,7 +363,7 @@ public class Configuration {
 	 *            the delay in milliseconds.
 	 */
 	public void setrequestDelay(final int requestDelay) {
-		this.requestDelay = requestDelay;
+		this.politenessDelay = requestDelay;
 	}
 
 	/**
@@ -651,25 +634,6 @@ public class Configuration {
 	}
 
 	/**
-	 * Gets the db location.
-	 *
-	 * @return the dbLocation
-	 */
-	public String getDbLocation() {
-		return dbLocation;
-	}
-
-	/**
-	 * Sets the db location.
-	 *
-	 * @param dbLocation
-	 *            the dbLocation to set
-	 */
-	public void setDbLocation(final String dbLocation) {
-		this.dbLocation = dbLocation;
-	}
-
-	/**
 	 * To string.
 	 *
 	 * @return the string
@@ -752,5 +716,53 @@ public class Configuration {
 	 */
 	public void setUser(final String user) {
 		this.user = user;
+	}
+
+	public String getJdbcUrl() {
+		return jdbcUrl;
+	}
+
+	public void setJdbcUrl(String jdbcUrl) {
+		this.jdbcUrl = jdbcUrl;
+	}
+
+	public String getJdbcDriver() {
+		return jdbcDriver;
+	}
+
+	public void setJdbcDriver(String jdbcDriver) {
+		this.jdbcDriver = jdbcDriver;
+	}
+
+	public String getJdbcUser() {
+		return jdbcUser;
+	}
+
+	public void setJdbcUser(String jdbcUser) {
+		this.jdbcUser = jdbcUser;
+	}
+
+	public String getJdbcPassword() {
+		return jdbcPassword;
+	}
+
+	public void setJdbcPassword(String jdbcPassword) {
+		this.jdbcPassword = jdbcPassword;
+	}
+
+	public Properties getProperties() {
+		return properties;
+	}
+
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+	}
+
+	public String getIndexDirectory() {
+		return indexDirectory;
+	}
+
+	public void setIndexDirectory(String indexDirectory) {
+		this.indexDirectory = indexDirectory;
 	}
 }

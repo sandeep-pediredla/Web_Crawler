@@ -1,14 +1,16 @@
 
 package com.wipro.digital.assignment.web.crawler.actors;
 
-import com.wipro.digital.assignment.web.crawler.html.model.HtmPageContent;
-import com.wipro.digital.assignment.web.crawler.job.RequestUrl;
+import java.io.IOException;
+
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.store.LockObtainFailedException;
+
+import com.wipro.digital.assignment.web.crawler.document.DocumentIndex;
 
 import akka.actor.UntypedAbstractActor;
+import scala.Tuple2;
 
-/**
- * The Class DocumentIndexActor.
- */
 public class DocumentIndexActor extends UntypedAbstractActor {
 
 	/**
@@ -19,9 +21,23 @@ public class DocumentIndexActor extends UntypedAbstractActor {
 	 */
 	@Override
 	public void onReceive(final Object message) {
-		if (message instanceof RequestUrl) {
-			final HtmPageContent pageContent = (HtmPageContent) message;
-			getSender().tell(pageContent, getSelf());
+
+		if (message instanceof Tuple2) {
+			Tuple2<String, String> actionEvent = (Tuple2<String, String>) message;
+
+			DocumentIndex docIndex = new DocumentIndex();
+			try {
+				docIndex.createIndex(actionEvent._1, actionEvent._2);
+			} catch (CorruptIndexException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (LockObtainFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

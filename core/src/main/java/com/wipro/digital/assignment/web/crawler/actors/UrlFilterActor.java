@@ -5,17 +5,8 @@ import com.wipro.digital.assignment.web.crawler.html.model.HtmPageContent;
 
 import akka.actor.UntypedAbstractActor;
 
-/**
- * The Class UrlFilterActor.
- */
-public class UrlFilterActor extends UntypedAbstractActor {
+public class URLFilterActor extends UntypedAbstractActor {
 
-	/**
-	 * On receive.
-	 *
-	 * @param message
-	 *            the message
-	 */
 	@Override
 	public void onReceive(final Object message) {
 

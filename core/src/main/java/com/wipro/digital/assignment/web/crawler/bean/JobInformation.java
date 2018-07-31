@@ -21,6 +21,8 @@ public class JobInformation {
 	/** The url. */
 	private String url;
 
+	private int parentId;
+
 	/**
 	 * Gets the job id.
 	 *
@@ -133,6 +135,14 @@ public class JobInformation {
 	 */
 	public void setUrl(final String url) {
 		this.url = url;
+	}
+
+	public int getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
 	}
 
 }

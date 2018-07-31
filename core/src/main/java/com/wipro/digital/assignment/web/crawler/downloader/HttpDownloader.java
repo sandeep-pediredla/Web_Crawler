@@ -62,6 +62,8 @@ public class HttpDownloader implements Downloader {
 	 */
 	@Override
 	public HtmPageContent download(final RequestUrl requestUrl) {
+
+		logger.error("Requested url is " + requestUrl);
 		final HtmPageContent pageContent = new HtmPageContent(requestUrl);
 		final CloseableHttpClient httpclient = HttpClients.createDefault();
 		// final HttpClientRequestContext requestContext =

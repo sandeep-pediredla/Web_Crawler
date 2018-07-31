@@ -6,10 +6,7 @@ import com.wipro.digital.assignment.web.crawler.html.model.HtmPageContent;
 
 import akka.actor.UntypedAbstractActor;
 
-/**
- * The Class UrlExtractorActor.
- */
-public class UrlExtractorActor extends UntypedAbstractActor {
+public class URLExtractorActor extends UntypedAbstractActor {
 
 	/**
 	 * On receive.

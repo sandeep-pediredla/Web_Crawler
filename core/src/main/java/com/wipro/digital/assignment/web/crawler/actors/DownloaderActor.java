@@ -8,9 +8,6 @@ import com.wipro.digital.assignment.web.crawler.job.RequestUrl;
 
 import akka.actor.UntypedAbstractActor;
 
-/**
- * The Class DownloaderActor.
- */
 public class DownloaderActor extends UntypedAbstractActor {
 
 	@Override
