@@ -67,27 +67,6 @@ mvn clean install
 | ------------- | ------------- | ------------- |
 |  dbLocation |db location |String |
 |  tmpStorageFolder|The folder which will be used by crawler for storing the intermediate crawl data. The content of this folder should not be modified manually. | String|
-|  resumableCrawling = false| If this feature is enabled, you would be able to resume a previously stopped/crashed crawl.| boolean|
-| long dbLockTimeout | | |
-|  maxDepthOfCrawling |Maximum depth of crawling For unlimited depth | int|
-|  maxPagesToFetch | Maximum number of pages to fetch For unlimited number of pages, this  parameter should be set to -1.| int|
-|  userAgentString | user-agent|String |
-|  politenessDelay |politeness delay in milliseconds. a politeness policy that states how to avoid overloading Web sites. | int|
-|  includeHttpsPages | Should we also crawl https pages?.| boolean|
-|  includeBinaryContentInCrawling |Should we fetch binary content such as images, audio, ...? |boolean |
-|  processBinaryContentInCrawling |Should we process binary content such as image, audio, ... using TIKA? |boolean |
-|  maxConnectionsPerHost |Maximum Connections per host | int|
-|  maxTotalConnections | Maximum total connections.|int |
-|  socketTimeout | Socket timeout in milliseconds.| int|
-|   connectionTimeout | Connection timeout in milliseconds.|int |
-| int maxOutgoingLinksToFollow | Max number of outgoing links which are processed from a page.| int|
-|  maxDownloadSize | Max allowed size of a page. Pages larger than this size will not be fetched.|int |
-| boolean followRedirects | Should we follow redirects?.| boolean|
-|  shutdownOnEmptyQueue |Should the crawler stop running when the queue is empty?. |boolean |
-|  threadMonitoringDelaySeconds |Wait this long before checking the status of the worker threads. | int|
-|  threadShutdownDelaySeconds | Wait this long to verify the craweler threads are finished working.| int|
-|  cleanupDelaySeconds |Wait this long in seconds before launching cleanup. |int |
-|  method |The request method type. |String | 
 |  documentStorageFolder| The document storage folder.|String |
 |  user|user name | String|
 
